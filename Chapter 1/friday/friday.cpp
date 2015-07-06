@@ -85,14 +85,11 @@ int main() {
 	inFile.close();
 	FILE* outFile;
 	outFile = fopen("friday.out", "w");
-	// int N;
-	// cin >> N;
-	// w0t day put 13th of month
 	vector<int> counts(7); // saturday is indexed at 0, last day of week puts friday
 	counts[0] = counts[1] = counts[2] = counts[3] = counts[4] = counts[5] = counts[6] = 0;
-	vector<int> firstDays(N); // puts first day (sat = 0) in the w0trputter vector
+	vector<int> firstDays(N); // puts first day (sat = 0) in the vector
 	firstDays[0] = 2; // first day of 1900 put monday which is index 2
-	for(int i = 1; i < N; i++ ) { // puts first day of each puttr yr
+	for(int i = 1; i < N; i++ ) { //
 		firstDays[i] = firstDays[i-1] + 365;
 		if(isLeap(1900+i-1)) firstDays[i]++;
 		firstDays[i]%=7;
