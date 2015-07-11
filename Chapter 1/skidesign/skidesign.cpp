@@ -41,6 +41,23 @@ bool sort1(const hill &lhs, const hill &rhs) {
 	return false;
 }
 
+int compute(int minHeight, int maxHeight, vector<hill> &hills, int N) {
+	for(int i = 0; i < N; i++ ) {
+		if(hills[i].originalHeight + hills[i].change < minHeight) {
+			hills[i].change = minHeight - hills[i].originalHeight;
+		}
+		if(hills[i].originalHeight + hills[i].change > maxHeight) {
+			hills[i].change = maxHeight - hills[i].originalHeight;
+		}
+	}
+	int sum = 0;
+	for(int i = 0; i < N; i++ ) {
+		sum += (hills[i].change * hills[i].change);
+		cout << hills[i].originalHeight << " " << hills[i].change << " " << hills[i].originalHeight + hills[i].change << endl;
+	}
+	return sum;
+}
+
 int main() {
 	ifstream infile("skidesign.in");
 	ofstream outfile("skidesign.out");
@@ -52,21 +69,31 @@ int main() {
 		hills[i].change = 0;
 	}
 	sort(hills.begin(), hills.end(), sort1);
-	while(maxDiff(hills) > 17) {
-		// apply the change to whichever is smaller
-		if(ab(hills[0].change) < ab(hills[N - 1].change)) {
-			hills[0].change++;
-		}
-		else {
-			hills[N - 1].change--;
-		}
-		sort(hills.begin(), hills.end(), sort1);
-	}
-	int sum = 0;
+	int minHeight;
+	int maxHeight;
+	int s = 0;
 	for(int i = 0; i < N; i++ ) {
-		sum += (hills[i].change * hills[i].change);
-		cout << hills[i].originalHeight << " " << hills[i].change << " " << hills[i].originalHeight + hills[i].change << endl;
+		s += hills[i].originalHeight;
 	}
-	outfile << sum << endl;
+	s /= N;
+	maxHeight = s + 8;
+	minHeight = s - 9;
+	minHeight -= 8;
+	maxHeight -= 8;
+	int minSum = 2147483647;
+	int a = 0;
+	for(int i = 0; i < 20; i++ ) {
+		a = compute(minHeight, maxHeight, hills, N);
+		for(int i = 0; i < N; i++ ) {
+			hills[i].change = 0;
+		}
+		if(minSum > a) {
+			minSum = a;
+		}
+		minHeight++;
+		maxHeight++;
+	}
+	
+	outfile << minSum << endl;
 	return 0;
 }
